@@ -1,0 +1,42 @@
+# INTEGRACAO CONTINUA
+trigger:
+- main
+
+pool:
+  vmImage: 'ubuntu-latest'
+
+
+# CHECKOUT DO CODIGO
+steps:
+- checkout: self
+  displayName: 'Checkout do codigo'
+  
+# LOGIN NO AZURE CONTAINER REGISTRY  
+- task: Docker@2
+  inputs:
+    containerRegistry: '$(acrconnection)'
+    command: 'login'
+    username: '$(acrusername)'
+    password: '$(acrpassword)'
+  displayName: 'Login Azure Container Registry'
+
+# BUILD DA IMAGEM 
+- task: Docker@2
+  inputs:
+    command: build
+    dockerfile: '$(Build.SourcesDirectory)/Dockerfile'
+    containerRegistry: '$(acrconnection)'
+    repository: '$(imagename)'
+    tags: |
+      $(imagebuild)
+  displayName: 'Build'
+
+# PUSH DA IMAGEM NO AZURE CONTAINER REGISTRY
+- task: Docker@2
+  inputs:
+    command: push
+    containerRegistry: '$(acrconnection)'
+    repository: '$(imagename)'
+    tags: |
+      $(imagebuild)
+  displayName: 'Push Azure Container Registry'
