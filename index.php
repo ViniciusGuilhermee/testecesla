@@ -9,12 +9,10 @@
     <h1>Bem-vindo ao meu aplicativo web com CI/CD Pipeline!</h1>
     <?php
         // Obtendo a variável de ambiente
-        $URL = getenv('URL');
-        // Exibe data/hora atual
-        echo "<p>Hoje é " . date('Y-m-d H:i:s') . "</p>";
+        $url = getenv('url');
     ?>
     <!-- Botão redireciona para a URL inserida na variavel de ambiente definida em Library -->
-    <form method="get" action="<?php echo $URL; ?>">
+    <form method="get" action="<?php echo $url; ?>">
         <button type="submit">Visite o Site</button>
     </form>
 </body>
